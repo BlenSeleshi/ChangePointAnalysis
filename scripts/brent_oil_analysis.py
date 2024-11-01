@@ -2,8 +2,10 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import pymc3 as pm
+#import pymc as pm
 import ruptures as rpt
+from statsmodels.tsa.stattools import adfuller
+from statsmodels.tsa.arima.model import ARIMA
 import logging
 
 # Set up logging
@@ -55,25 +57,25 @@ def calculate_basic_statistics(data):
     return mean_price, median_price, std_dev_price
 
 # Bayesian Change Point Detection using PyMC3
-def bayesian_change_point_detection(data, mean_price):
-    logging.info("Starting Bayesian change point detection.")
-    with pm.Model() as model:
-        # Priors
-        mean_prior = pm.Normal('mean_prior', mu=mean_price, sigma=10)
-        change_point = pm.DiscreteUniform('change_point', lower=0, upper=len(data)-1)
+# def bayesian_change_point_detection(data, mean_price):
+#     logging.info("Starting Bayesian change point detection.")
+#     with pm.Model() as model:
+#         # Priors
+#         mean_prior = pm.Normal('mean_prior', mu=mean_price, sigma=10)
+#         change_point = pm.DiscreteUniform('change_point', lower=0, upper=len(data)-1)
         
-        # Likelihood
-        likelihood = pm.Normal('likelihood', mu=mean_prior, sigma=10, observed=data['Price'])
+#         # Likelihood
+#         likelihood = pm.Normal('likelihood', mu=mean_prior, sigma=10, observed=data['Price'])
         
-        # Inference
-        trace = pm.sample(1000, tune=1000, cores=2, progressbar=False)
+#         # Inference
+#         trace = pm.sample(1000, tune=1000, cores=2, progressbar=False)
     
-    pm.plot_posterior(trace)
-    plt.show()
-    logging.info("Bayesian change point detection completed.")
+#     pm.plot_posterior(trace)
+#     plt.show()
+#     logging.info("Bayesian change point detection completed.")
 
 # Function for change point detection using PELT algorithm
-def pelt_change_point_detection(data, penalty=20, model_type="rbf"):
+def pelt_change_point_detection(data, penalty=10, model_type="rbf"):
     logging.info("Starting PELT change point detection.")
     price_array = data['Price'].values
     algo = rpt.Pelt(model=model_type).fit(price_array)
@@ -93,3 +95,18 @@ def pelt_change_point_detection(data, penalty=20, model_type="rbf"):
     logging.info("PELT change point detection completed.")
     logging.info(f"Detected change points: {change_points}")
     return change_points
+
+# Function to perform ARIMA modeling
+def apply_arima(data, order=(1, 1, 1)):
+    model = ARIMA(data['Price'], order=order)
+    model_fit = model.fit()
+    
+    # Plot model fit and forecast
+    plt.figure(figsize=(14, 7))
+    plt.plot(data['Price'], label='Original')
+    plt.plot(model_fit.fittedvalues, color='red', label='ARIMA Fit')
+    plt.legend(loc='best')
+    plt.title('ARIMA Model Fit')
+    plt.show()
+    
+    return model_fit.summary()
