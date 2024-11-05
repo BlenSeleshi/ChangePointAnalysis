@@ -1,25 +1,32 @@
 # oil_analysis.py
+# oil_analysis.py
 
 import wbdata
+import datetime
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from statsmodels.tsa.api import VAR
 
-def fetch_data(countries, indicators):
+def fetch_data(countries, indicators, start_date, end_date):
     """
-    Fetch data from the World Bank for given countries and indicators.
+    Fetch data from the World Bank for given countries and indicators over a specified date range.
     
     Parameters:
     countries (list): List of country codes.
     indicators (dict): Dictionary of indicators with descriptive keys.
+    start_date (str): Start date in 'YYYY-MM-DD' format.
+    end_date (str): End date in 'YYYY-MM-DD' format.
 
     Returns:
     DataFrame: A DataFrame containing the fetched data.
     """
-    data = wbdata.get_dataframe(indicators, country=countries, data_date=True)
+    # Convert date strings to datetime objects
+    start_date = datetime.datetime.strptime(start_date, "%Y-%m-%d")
+    end_date = datetime.datetime.strptime(end_date, "%Y-%m-%d")
+    
+    # Fetch the data from World Bank API
+    data = wbdata.get_dataframe(indicators, country=countries, data_date=(start_date, end_date))
     data.reset_index(inplace=True)
     return data
+
 
 def plot_time_series(data, title):
     """
