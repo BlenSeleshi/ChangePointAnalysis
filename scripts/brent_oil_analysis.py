@@ -2,7 +2,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-#import pymc as pm
+from scipy.stats import norm
 import ruptures as rpt
 from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.arima.model import ARIMA
@@ -57,22 +57,28 @@ def calculate_basic_statistics(data):
     return mean_price, median_price, std_dev_price
 
 # Bayesian Change Point Detection using PyMC3
-# def bayesian_change_point_detection(data, mean_price):
-#     logging.info("Starting Bayesian change point detection.")
-#     with pm.Model() as model:
-#         # Priors
-#         mean_prior = pm.Normal('mean_prior', mu=mean_price, sigma=10)
-#         change_point = pm.DiscreteUniform('change_point', lower=0, upper=len(data)-1)
-        
-#         # Likelihood
-#         likelihood = pm.Normal('likelihood', mu=mean_prior, sigma=10, observed=data['Price'])
-        
-#         # Inference
-#         trace = pm.sample(1000, tune=1000, cores=2, progressbar=False)
+def bayesian_change_point_detection(data, mean_price):
+    logging.info("Starting simplified Bayesian change point detection.")
     
-#     pm.plot_posterior(trace)
-#     plt.show()
-#     logging.info("Bayesian change point detection completed.")
+    # Calculate cumulative sums to look for a point of deviation from the overall mean
+    price_array = data['Price'].values
+    cumulative_sum = np.cumsum(price_array - mean_price)
+    
+    # Detect the point of maximum deviation as a candidate for change point
+    change_point_index = np.argmax(np.abs(cumulative_sum))
+    
+    # Plot results
+    plt.figure(figsize=(14, 7))
+    plt.plot(data.index, price_array, label='Brent Oil Price')
+    plt.axvline(x=data.index[change_point_index], color='red', linestyle='--', label='Change Point')
+    plt.xlabel('Date')
+    plt.ylabel('Price (USD)')
+    plt.title('Brent Oil Prices with Simplified Change Point Detection')
+    plt.legend()
+    plt.show()
+    
+    logging.info(f"Simplified Bayesian change point detection completed. Change point detected at index {change_point_index}")
+    return change_point_index
 
 # Function for change point detection using PELT algorithm
 def pelt_change_point_detection(data, penalty=10, model_type="rbf"):
