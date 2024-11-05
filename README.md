@@ -1,11 +1,66 @@
-# Brent Oil Price Analysis
+# Oil Price Analysis Project
 
-This repository contains scripts and Jupyter notebooks for analyzing the impact of major political and economic events on Brent oil prices. The analysis includes time series forecasting with SARIMAX, change point detection using the Pruned Exact Linear Time (PELT) algorithm, and rolling volatility analysis. These methods aim to provide insights for investors, policymakers, and energy companies on how Brent oil prices respond to global events.
+## Overview
+
+This repository contains scripts and Jupyter notebooks for analyzing the impact of major political and economic events on Brent oil prices. The analysis utilizes various modeling techniques, including time series forecasting with SARIMAX, change point detection using the Pruned Exact Linear Time (PELT) algorithm, and rolling volatility analysis. Additionally, it explores the dynamics of Brent oil prices through Vector Autoregression (VAR), Long Short-Term Memory (LSTM) networks, and Markov-Switching models. These methods aim to provide insights for investors, policymakers, and energy companies on how Brent oil prices respond to global events.
+
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [Project Structure](#project-structure)
+- [Analysis Steps](#analysis-steps)
+- [Models](#models)
+- [Data](#data)
+- [Results Interpretation](#results-interpretation)
+- [License](#license)
+
+## Installation
+
+To run this project, ensure you have Python 3.x installed, along with the necessary libraries. You can set up a virtual environment and install the required packages using pip. Here's how:
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/oil-price-analysis.git
+   cd oil-price-analysis
+   ```
+
+````
+
+2. Create a virtual environment:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   ```
+
+3. Install the required packages:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ## Project Structure
 
-- **`brent_oil_analysis.py`**: A Python script that performs ARIMA modeling, rolling volatility calculations, and change point detection.
-- **`brent_oil_analysis.ipynb`**: A Jupyter notebook that provides an interactive environment to explore and visualize Brent oil prices, change points, and volatility trends over time. It includes detailed commentary and visualizations for each step of the analysis.
+```
+oil-price-analysis/
+│
+├── data/
+│   └── your_data.csv               # Your input data file
+├── models/
+│       ├── var_model.pkl            # Saved VAR model
+│       ├── markov_model.pkl         # Saved Markov-Switching model
+│       ├── lstm_model.h5            # Saved LSTM model
+│
+├── scripts/
+│   ├── data_preparation.py          # Data loading and preprocessing
+│   ├── var_model.py                 # VAR model implementation
+│   ├── markov_switching.py          # Markov-Switching model implementation
+│   ├── lstm_model.py                # LSTM model implementation
+│   ├── evaluation.py                # Model evaluation functions
+│   └── brent_oil_analysis.py        # SARIMAX modeling and change point detection
+│
+└── brent_oil_analysis.ipynb          # Jupyter Notebook for analysis
+```
 
 ## Requirements
 
@@ -18,6 +73,7 @@ The analysis requires the following libraries:
 - `statsmodels`
 - `ruptures`
 - `scipy`
+- `tensorflow` (for LSTM)
 
 Install the required packages with:
 
@@ -61,14 +117,32 @@ Change point detection identifies moments where the trend or structure of the pr
 - Visualize change points as red dashed lines on the time series plot.
 - This analysis helps to pinpoint dates where significant shifts in oil prices occurred, which can often be aligned with historical events impacting the energy market.
 
+### 4. VAR Model
+
+Train a VAR model, generate forecasts, and compute Impulse Response Functions (IRFs) using the `var_model` module.
+
+### 5. LSTM Model
+
+Define, train, and evaluate an LSTM model for predicting future prices based on historical data.
+
+### 6. Markov-Switching Model
+
+Train and evaluate a Markov-Switching model for regime interpretation of the price series.
+
+## Models
+
+- **VAR Model**: Captures linear relationships between multiple time series and forecasts future values based on historical data.
+- **LSTM Model**: A type of recurrent neural network (RNN) that is capable of learning long-term dependencies in time series data for more accurate predictions.
+- **Markov-Switching Model**: Used for regime-switching analysis to understand different market conditions affecting oil prices.
+- **SARIMAX Model**: A time series model used to capture the effects of seasonal variations and other exogenous factors on oil price forecasting.
+
 ## Visualizations
 
 The notebook and script include the following visualizations:
 
 - **Brent Oil Price with Rolling Volatility**: Shows the Brent oil price trend over time with 30-day rolling volatility.
 - **Brent Oil Price with Change Points**: Highlights change points identified using the PELT algorithm on the Brent oil price timeline.
-
-Each visualization provides insight into historical patterns, volatility, and potential influences on oil prices.
+- **Forecast vs Actual Values**: Visualizes the performance of VAR and LSTM models against actual price data.
 
 ## Usage
 
@@ -95,9 +169,19 @@ The notebook is organized with explanations and visualizations for each analysis
 - **ARIMA Results**: Provides insights into the dynamics of Brent oil prices, showing how past prices influence current prices through autoregressive and moving average components.
 - **Rolling Volatility**: Highlights periods of market instability, which may signal responses to economic or geopolitical events.
 - **Change Point Detection**: Detects key moments when the Brent oil price trend shifts, allowing for historical event correlation analysis.
+- **Model Performance**: Evaluation metrics (e.g., RMSE, MAE) are used to assess the forecasting accuracy of VAR and LSTM models.
 
 ## Conclusion
 
 This analysis framework helps stakeholders understand how major events impact Brent oil prices. The results and visualizations provide a comprehensive view of price trends, volatility patterns, and structural changes over time.
 
 For further inquiries or suggestions, please contact the repository owner.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+```
+
+```
+````
