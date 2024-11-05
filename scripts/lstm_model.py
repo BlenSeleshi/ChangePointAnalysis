@@ -3,9 +3,10 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Dropout
 from tensorflow.keras.callbacks import ModelCheckpoint
 import logging
+import joblib
 import os
 
-logging.basicConfig(filename='logs/lstm_model.log', level=logging.INFO,
+logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 def create_lstm_model(input_shape):
@@ -23,8 +24,13 @@ def create_lstm_model(input_shape):
 
 def train_lstm_model(model, X_train, y_train, epochs=20, batch_size=32):
     """Train the LSTM model and save checkpoints."""
-    checkpoint_dir = "models/saved_model_files/lstm_model.h5"
+    checkpoint_dir = "models/saved_model_files/lstm_model.keras"
     checkpoint = ModelCheckpoint(checkpoint_dir, save_best_only=True)
     history = model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, callbacks=[checkpoint])
     logging.info(f"LSTM model trained for {epochs} epochs")
     return model, history
+
+def save_lstm_model(lstm_model, model_path="lstm_model.pkl"):
+    """Save the trained lstm model."""
+    joblib.dump(lstm_model, model_path)
+    logging.info(f"lstm model saved to {model_path}")
