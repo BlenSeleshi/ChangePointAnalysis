@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
 import pandas as pd
+from flask_cors import CORS
 
 app = Flask(__name__)
 
@@ -15,7 +16,7 @@ model_metrics = {
 def home():
     return jsonify({"message": "Welcome to the Brent Oil Price Dashboard API!"})
 
-# Endpoint: Get Historical Price Trends
+# Endpoint: Historical Price Trends
 @app.route('/api/trends', methods=['GET'])
 def get_price_trends():
     try:
@@ -24,7 +25,7 @@ def get_price_trends():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
-# Endpoint: Get Event Correlations
+# Endpoint: Event Correlations
 @app.route('/api/events', methods=['GET'])
 def get_event_correlations():
     try:
@@ -33,7 +34,7 @@ def get_event_correlations():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
-# Endpoint: Get Model Metrics
+# Endpoint: Model Metrics
 @app.route('/api/metrics', methods=['GET'])
 def get_model_metrics():
     try:
