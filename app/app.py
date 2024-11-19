@@ -3,10 +3,11 @@ import pandas as pd
 from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app) 
 
 # Load processed analysis data (e.g., historical trends and event correlations)
-price_trends_data = pd.read_csv( r'C:\Users\Blen\OneDrive\Documents\10Academy\Week10\data\Copy of BrentOilPrices.csv')  # Replace with the actual data file
-event_data = pd.read_csv(r'C:\Users\Blen\OneDrive\Desktop\10Academy\ChangePointAnalysis\data\additional_economic_indicators.csv')  # Replace with the actual data file
+price_trends_data = pd.read_csv( r'C:\Users\Blen\OneDrive\Documents\10Academy\Week10\data\Copy of BrentOilPrices.csv')  
+event_data = pd.read_csv(r'C:\Users\Blen\OneDrive\Desktop\10Academy\ChangePointAnalysis\data\events.csv')  
 model_metrics = {
     "rmse": 2.34,
     "mae": 1.16
