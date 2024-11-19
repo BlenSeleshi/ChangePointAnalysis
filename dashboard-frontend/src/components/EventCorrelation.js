@@ -18,17 +18,17 @@ function EventCorrelation() {
       <table>
         <thead>
           <tr>
-            <th>Event</th>
             <th>Date</th>
-            <th>Correlation</th>
+            <th>Major Event</th>
+            <th>Category</th>
           </tr>
         </thead>
         <tbody>
           {events.map((event, index) => (
             <tr key={index}>
-              <td>{event.Event}</td>
               <td>{event.Date}</td>
-              <td>{event.Correlation}</td>
+              <td>{event.MajorEvent}</td>
+              <td>{event.Category}</td>
             </tr>
           ))}
         </tbody>
