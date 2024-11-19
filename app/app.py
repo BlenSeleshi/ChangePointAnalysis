@@ -1,11 +1,13 @@
 from flask import Flask, jsonify, request
 import pandas as pd
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app) 
 
 # Load processed analysis data (e.g., historical trends and event correlations)
-price_trends_data = pd.read_csv( r'C:\Users\Blen\OneDrive\Documents\10Academy\Week10\data\Copy of BrentOilPrices.csv')  # Replace with the actual data file
-event_data = pd.read_csv(r'C:\Users\Blen\OneDrive\Desktop\10Academy\ChangePointAnalysis\data\additional_economic_indicators.csv')  # Replace with the actual data file
+price_trends_data = pd.read_csv( r'C:\Users\Blen\OneDrive\Documents\10Academy\Week10\data\Copy of BrentOilPrices.csv')  
+event_data = pd.read_csv(r'C:\Users\Blen\OneDrive\Desktop\10Academy\ChangePointAnalysis\data\events.csv')  
 model_metrics = {
     "rmse": 2.34,
     "mae": 1.16
@@ -15,7 +17,7 @@ model_metrics = {
 def home():
     return jsonify({"message": "Welcome to the Brent Oil Price Dashboard API!"})
 
-# Endpoint: Get Historical Price Trends
+# Endpoint: Historical Price Trends
 @app.route('/api/trends', methods=['GET'])
 def get_price_trends():
     try:
@@ -24,7 +26,7 @@ def get_price_trends():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
-# Endpoint: Get Event Correlations
+# Endpoint: Event Correlations
 @app.route('/api/events', methods=['GET'])
 def get_event_correlations():
     try:
@@ -33,7 +35,7 @@ def get_event_correlations():
     except Exception as e:
         return jsonify({"status": "error", "message": str(e)})
 
-# Endpoint: Get Model Metrics
+# Endpoint: Model Metrics
 @app.route('/api/metrics', methods=['GET'])
 def get_model_metrics():
     try:
